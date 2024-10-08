@@ -1,26 +1,27 @@
 <?php
 
-require_once 'config.php'; // Verbindet die Datenbankkonfiguration
+require_once 'config.php'; // Include the database configuration
 
-// Bindet das Skript extract.php für Rohdaten ein
-$weather = include('extractweather.php');
+// Include the script for raw data
+$pedestrian_data = include('extractpedestrians.php');
 
-//print_r($weather);
+// Function to sort the array by 'measured_at_new'
+function sortByNewestMeasurement($a, $b) {
+    return strtotime($b['measured_at_new']) - strtotime($a['measured_at_new']);
+}
 
-print_r($weather['hourly']['time'][0]);
-
-$time = $weather['hourly']['time'][0];
-echo $time;
-
-echo "<br>";
-
-$temperature = $weather['hourly']['temperature_2m'][0];
-echo $temperature;
-
-echo "<br>";
-
-$weather_code = $weather['hourly']['weather_code'][0];
-echo $weather_code;
-
+// Check if 'results' array is available in pedestrian_data
+if (isset($pedestrian_data['results']) && is_array($pedestrian_data['results'])) {
+    // Sort the results by 'measured_at_new' in descending order
+    usort($pedestrian_data['results'], 'sortByNewestMeasurement');
+    
+    // Get the newest entry (first element after sorting)
+    $newest_entry = $pedestrian_data['results'][0];
+    
+    // Print only the 'summe' value (number of pedestrians)
+    echo $newest_entry['summe'];
+} else {
+    echo "No pedestrian data available.";
+}
 
 ?>
