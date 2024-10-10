@@ -15,9 +15,6 @@ try {
     
     // Holt alle Datensätze
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Gibt die Daten als JSON aus
-    echo json_encode($data);
 
 } catch (PDOException $e) {
     die("Fehler beim Abrufen der Daten: " . $e->getMessage());
