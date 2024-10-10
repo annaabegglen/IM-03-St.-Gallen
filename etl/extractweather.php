@@ -1,6 +1,6 @@
 <?php
 
-$url = "https://api.open-meteo.com/v1/forecast?latitude=46.9481&longitude=7.4474&hourly=temperature_2m,precipitation_probability,weather_code";
+$url = "https://api.open-meteo.com/v1/forecast?latitude=46.9481&longitude=7.4474&hourly=temperature_2m,weather_code";
 
 // Initialisiert eine cURL-Sitzung (statt fetch bei JS)
 $ch = curl_init($url);

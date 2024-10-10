@@ -15,7 +15,7 @@ try {
     $pdo = new PDO($dsn, $username, $password, $options);
 
     // SQL-Query mit Platzhaltern für das Einfügen von Daten in die pedestrian_data-Tabelle
-    $sql = "INSERT INTO pedestrian_data (measured_at, summe, temperature_2m, precipitation_probability, weather_code) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO pedestrian_data (measured_at, summe, temperature_2m, weather_code) VALUES (?, ?, ?, ?, ?)";
 
     // Bereitet die SQL-Anweisung vor
     $stmt = $pdo->prepare($sql);
@@ -25,7 +25,6 @@ try {
     $summe = isset($pedestrianArray['summe']) ? $pedestrianArray['summe'] : null;
 
     $temperature = isset($weatherArray['hourly']['temperature_2m'][0]) ? $weatherArray['hourly']['temperature_2m'][0] : null;
-    $precipitationProbability = isset($weatherArray['hourly']['precipitation_probability'][0]) ? $weatherArray['hourly']['precipitation_probability'][0] : null;
     $weatherCode = isset($weatherArray['hourly']['weather_code'][0]) ? $weatherArray['hourly']['weather_code'][0] : null;
 
     // Führt die SQL-Anweisung aus
@@ -33,7 +32,6 @@ try {
         $measuredAt,
         $summe,
         $temperature,
-        $precipitationProbability,
         $weatherCode
     ]);
 
