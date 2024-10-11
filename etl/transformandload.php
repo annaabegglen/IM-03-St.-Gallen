@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config.php'; // Verbindet die Datenbankkonfiguration
+require_once 'etl/config.php'; // Verbindet die Datenbankkonfiguration
 
 // Fußgängerdaten verarbeiten
 $pedestrian_data = include('extractpedestrians.php');

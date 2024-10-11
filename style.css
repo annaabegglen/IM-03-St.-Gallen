@@ -1,3 +1,27 @@
 body {
-    background-color: #FFB668;
+    background-color: #FFB668; /* Hintergrundfarbe */
+    margin: 0; /* Entfernt Standard-Margins */
+    padding: 0; /* Entfernt Standard-Paddings */
+    overflow: hidden; /* Verhindert Scrollen */
+    width: 100%; /* Volle Breite */
+    height: 100%; /* Volle Höhe */
+}
+
+#container {
+    position: relative; /* Container für die Bratwürste */
+    width: 100vw; /* Volle Breite des Viewports */
+    height: 100vh; /* Volle Höhe des Viewports */
+    pointer-events: none; /* Verhindert Interaktionen mit Bratwürsten */
+}
+
+.bratwurst {
+    position: absolute; /* Absolut positionierte Bratwürste */
+    width: 50px; /* Breite der Bratwurst */
+    height: auto; /* Automatische Höhe */
+    animation: move 10s infinite alternate; /* Animation für Bewegung (langsamer) */
+}
+
+@keyframes move {
+    0% { transform: translate(-100px, 0); } /* Startposition (leicht außerhalb des Bildschirms) */
+    100% { transform: translate(100vw, 0); } /* Endposition (Bewegung waagrecht über den Bildschirm) */
 }

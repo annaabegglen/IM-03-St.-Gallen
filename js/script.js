@@ -1,3 +1,26 @@
+// Anzahl der Bratwürste
+const numberOfBratwursts = 30;
+const container = document.getElementById('container');
+
+// Funktion zum Erstellen und zufälligen Platzieren der Bratwürste
+function createBratwursts() {
+    for (let i = 0; i < numberOfBratwursts; i++) {
+        const bratwurst = document.createElement('img'); // Erstellt ein neues Bild-Element
+        bratwurst.src = 'images/bratwurst.png'; // Pfad zur Bratwurst-Bilddatei
+        bratwurst.classList.add('bratwurst'); // Fügt die CSS-Klasse für die Bratwurst hinzu
+        
+        // Zufällige Position innerhalb des Containers
+        bratwurst.style.left = `${Math.random() * 100}vw`; // Zufällige horizontale Position
+        bratwurst.style.top = `${Math.random() * 100}vh`; // Zufällige vertikale Position
+        
+        // Zufällige Bewegungsgeschwindigkeit und Richtung
+        bratwurst.style.animationDuration = `${Math.random() * 5 + 3}s`; // Zufällige Animationsdauer zwischen 3 und 8 Sekunden
+        bratwurst.style.animationDelay = `${Math.random() * 5}s`; // Zufällige Verzögerung der Animation
+        
+        container.appendChild(bratwurst); // Fügt die Bratwurst zum Container hinzu
+    }
+}
+
 // Fetch data from the provided URL
 async function fetchData() {
     try {
@@ -41,5 +64,8 @@ function displaySentence(measuredAt, temperature2m, summe) {
     document.getElementById('dataDisplay').innerText = sentence;
 }
 
-// Daten abrufen und den Satz anzeigen, wenn die Seite geladen wird
-fetchData();
+// Bratwürste erstellen und Daten abrufen, wenn die Seite geladen wird
+window.onload = () => {
+    createBratwursts(); // Erstellt die Bratwürste
+    fetchData(); // Ruft die Daten ab
+};
