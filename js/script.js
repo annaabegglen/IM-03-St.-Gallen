@@ -1,3 +1,4 @@
+// script.js
 async function fetchData() {
     try {
         const response = await fetch('https://im3.annaabegglen.ch/etl/unload.php');
@@ -13,13 +14,14 @@ async function fetchData() {
             const measuredAt = data[0].measured_at;
             const summe = data[0].summe;
             const temperature2m = data[0].temperature_2m;
-            const weatherCode = data[0].weather_code; // Assuming weather_code is the key in your API response
+            const weatherCode = data[0].weather_code;
             
             console.log(`Gemessen um: ${measuredAt}, Temperatur: ${temperature2m}, Personen: ${summe}, Wettercode: ${weatherCode}`);
             
             displaySentence(measuredAt, temperature2m, summe);
-            updateBackgroundColor(temperature2m);  // Farbe aktualisieren
-            displayWeatherImage(weatherCode); // Wetterbild aktualisieren
+            updateBackgroundColor(temperature2m);
+            displayWeatherImage(weatherCode);
+            displayWurstImage(temperature2m); // Wurstbild aktualisieren
         } else {
             console.log("Keine Daten verfügbar.");
             document.getElementById('dataDisplay').innerText = 'Keine Daten verfügbar.';
@@ -57,11 +59,9 @@ function updateBackgroundColor(temperature2m) {
 }
 
 function displayWeatherImage(weatherCode) {
-    // Alle Bilder ausblenden
     const images = document.querySelectorAll('.weather-image');
     images.forEach(img => img.style.display = 'none');
     
-    // Passendes Bild anzeigen
     switch (weatherCode) {
         case 0:
             document.getElementById('Sonne').style.display = 'block';
@@ -71,7 +71,7 @@ function displayWeatherImage(weatherCode) {
             document.getElementById('Wolke').style.display = 'block';
             break;
         case 3:
-            document.getElementById('Wolke').style.display = 'block'; // Bewölkt
+            document.getElementById('Wolke').style.display = 'block'; 
             break;
         case 45:
         case 48:
@@ -108,6 +108,22 @@ function displayWeatherImage(weatherCode) {
         default:
             console.log("Unbekannter Wettercode:", weatherCode);
     }
+}
+
+function displayWurstImage(temperature2m) {
+    // Alle Wurstbilder ausblenden
+    const wurstImages = document.querySelectorAll('.wurst-image');
+    wurstImages.forEach(img => img.style.display = 'none');
+
+    // Wurstbild abhängig von der Temperatur anzeigen
+    if (temperature2m < 10) {
+        document.getElementById('Bratkalt').style.display = 'block'; // Kalt
+    } else if (temperature2m >= 10 && temperature2m < 20) {
+        document.getElementById('Bratwarm').style.display = 'block'; // Warm
+    } else if (temperature2m >= 20) {
+        document.getElementById('Bratheiss').style.display = 'block'; // Heiß
+    }
+    
 }
 
 window.onload = () => {

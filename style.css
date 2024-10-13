@@ -16,6 +16,15 @@ body {
     display: none; /* Bilder standardmäßig unsichtbar */
 }
 
+.wurst-image {
+    position: absolute;
+    top: 20vw;
+    right: 30vw;
+    width: 2vw; /* Bildbreite anpassen */
+    height: auto;
+    display: none; /* Bilder standardmäßig unsichtbar */
+}
+
 h1 {
     position: absolute;
     bottom: 18vw; /* Stelle sicher, dass das h1 höher ist */
