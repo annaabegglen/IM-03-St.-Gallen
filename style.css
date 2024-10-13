@@ -11,37 +11,73 @@ body {
     position: absolute;
     top: 5vw;
     right: 5vw;
-    width: 7vw; /* Bildbreite anpassen */
+    width: 7vw;
     height: auto;
-    display: none; /* Bilder standardmäßig unsichtbar */
+    display: none;
 }
 
 .wurst-image {
     position: absolute;
-    top: 20vw;
-    right: 30vw;
-    width: 2vw; /* Bildbreite anpassen */
+    width: 2vw;
     height: auto;
-    display: none; /* Bilder standardmäßig unsichtbar */
+    display: none;
+}
+
+.dynamic-wurst {
+    position: absolute;
+    width: 2vw;
+    height: auto;
+    animation-duration: 10s;
+    animation-timing-function: linear;
+}
+
+/* Animiert das Bild von links nach rechts */
+@keyframes moveRight {
+    from {
+        left: -10vw;
+    }
+    to {
+        left: 110vw;
+    }
+}
+
+/* Animiert das Bild von rechts nach links */
+@keyframes moveLeft {
+    from {
+        left: 110vw;
+    }
+    to {
+        left: -10vw;
+    }
 }
 
 h1 {
     position: absolute;
-    bottom: 18vw; /* Stelle sicher, dass das h1 höher ist */
+    bottom: 18vw;
     left: 5vw;
     font-family: 'Inter', sans-serif;
     font-size: 64px;
     margin: 0;
-    color: #000; /* Schwarz als Textfarbe */
+    color: #000;
 }
 
-/* Text darunter (dataDisplay): Schriftart Inter, Schriftgröße 27px */
+/* Text darunter (dataDisplay) */
 #dataDisplay {
     position: absolute;
-    bottom: 16vw; /* Unter dem h1 */
+    bottom: 16vw;
     left: 5vw;
     font-family: 'Inter', sans-serif;
     font-size: 27px;
-    color: #000; /* Schwarz als Textfarbe */
+    color: #000;
     margin: 0;
+}
+
+/* Button für Datum */
+#measuredAtButton {
+    position: absolute;
+    bottom: 12vw;
+    left: 5vw;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
 }
