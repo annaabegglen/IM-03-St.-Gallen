@@ -1,6 +1,6 @@
 <?php
 
-require_once 'etl/config.php'; // Verbindet die Datenbankkonfiguration
+require_once 'config.php'; // Verbindet die Datenbankkonfiguration
 
 // Fußgängerdaten verarbeiten
 $pedestrian_data = include('extractpedestrians.php');
@@ -30,13 +30,37 @@ if (isset($pedestrian_data['results']) && is_array($pedestrian_data['results']))
 // Wetterdaten verarbeiten
 $weather = include('extractweather.php');
 
-// Hole die benötigten Wetterdaten
-$weather_measured_at = isset($weather['hourly']['time'][0]) ? $weather['hourly']['time'][0] : null;
-$temperature = isset($weather['hourly']['temperature_2m'][0]) ? $weather['hourly']['temperature_2m'][0] : null;
-$weather_code = isset($weather['hourly']['weather_code'][0]) ? $weather['hourly']['weather_code'][0] : null;
+// Ermittelt den neuesten Zeitpunkt in den Wetterdaten
+// $latest_weather_index = null;
+// $current_time = time();
+
+// foreach ($weather['hourly']['time'] as $index => $weather_time) {
+//     $weather_timestamp = strtotime($weather_time);
+//     // Finde den Eintrag, der am nächsten zur aktuellen Zeit ist
+//     if ($weather_timestamp <= $current_time && (is_null($latest_weather_index) || $weather_timestamp > strtotime($weather['hourly']['time'][$latest_weather_index]))) {
+//         $latest_weather_index = $index;
+//     }
+// }
+
+$temperature = $weather['current']['temperature_2m'];
+$weather_code = $weather['current']['weather_code'];
+
+echo "Temperatur: " . $temperature . "°C\n";
+echo "Wettercode: " . $weather_code . "\n";
+
+// if ($latest_weather_index !== null) {
+//     $weather_measured_at = $weather['hourly']['time'][$latest_weather_index];
+//     $temperature = $weather['hourly']['temperature_2m'][$latest_weather_index];
+//     $weather_code = $weather['hourly']['weather_code'][$latest_weather_index];
+// } else {
+//     echo "Keine aktuellen Wetterdaten verfügbar.";
+//     $weather_measured_at = null;
+//     $temperature = null;
+//     $weather_code = null;
+// }
 
 // Überprüfen, ob alle notwendigen Daten vorhanden sind
-if ($pedestrian_measured_at && $summe && $weather_measured_at && $temperature && $weather_code) {
+if ($pedestrian_measured_at && $summe && $temperature && $weather_code) {
     try {
         // Erstellt eine neue PDO-Instanz und startet die Transaktion
         $pdo = new PDO($dsn, $username, $password, $options);

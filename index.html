@@ -8,25 +8,36 @@
 </head>
 <body>
     <h1>St.Gallen läuft</h1>
+    
     <!-- Button für das Datum -->
     <button id="measuredAtButton">Datum laden...</button>
+    
     <!-- Platzhalter für den Satz -->
     <p id="dataDisplay">Lade Daten...</p>
 
+    <!-- Eingabefelder für Datum und Uhrzeit -->
+    <label for="dateInput">Datum (YYYY-MM-DD):</label>
+    <input type="date" id="dateInput" required>
+    
+    <label for="timeInput">Uhrzeit (HH:MM):</label>
+    <input type="time" id="timeInput" required>
+    
+    <!-- Button zum Abrufen der Daten -->
+    <button id="fetchButton">Daten abrufen</button>
+    
     <!-- Wettercode-Bilder -->
-    <img id="Sonne" src="images/Sonne.png" alt="Sonne" class="weather-image">
-    <img id="Wolke" src="images/Sonnenwolke.png" alt="Sonnenwolke" class="weather-image">
-    <img id="Blitz" src="images/Blitz.png" alt="Blitz" class="weather-image">
-    <img id="Nebel" src="images/Nebel.png" alt="Nebel" class="weather-image">
-    <img id="Regen" src="images/Regen.png" alt="Regen" class="weather-image">
-    <img id="Schnee" src="images/Schnee.png" alt="Schnee" class="weather-image">
+    <img id="Sonne" src="images/Sonne.png" alt="Sonne" class="weather-image" style="display:none;">
+    <img id="Wolke" src="images/Sonnenwolke.png" alt="Sonnenwolke" class="weather-image" style="display:none;">
+    <img id="Blitz" src="images/Blitz.png" alt="Blitz" class="weather-image" style="display:none;">
+    <img id="Nebel" src="images/Nebel.png" alt="Nebel" class="weather-image" style="display:none;">
+    <img id="Regen" src="images/Regen.png" alt="Regen" class="weather-image" style="display:none;">
+    <img id="Schnee" src="images/Schnee.png" alt="Schnee" class="weather-image" style="display:none;">
 
-    <img id="Bratkalt" src="images/Bratwurst kalt.png" alt="kalte Bratwurst" class="wurst-image">
-    <img id="Bratwarm" src="images/Bratwurst warm.png" alt="warme Bratwurst" class="wurst-image">
-    <img id="Bratheiss" src="images/Bratwurst heiss.png" alt="heisse Bratwurst" class="wurst-image">
+    <!-- Wurst-Bilder -->
+    <img id="Bratkalt" src="images/Bratwurst kalt.png" alt="kalte Bratwurst" class="wurst-image" style="display:none;">
+    <img id="Bratwarm" src="images/Bratwurst warm.png" alt="warme Bratwurst" class="wurst-image" style="display:none;">
+    <img id="Bratheiss" src="images/Bratwurst heiss.png" alt="heisse Bratwurst" class="wurst-image" style="display:none;">
     
     <script src="js/script.js"></script>
-
-    
 </body>
 </html>

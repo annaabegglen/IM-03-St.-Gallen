@@ -1,11 +1,12 @@
-async function fetchData() {
+async function fetchData(date, time) {
     try {
-        const response = await fetch('https://im3.annaabegglen.ch/etl/unload.php');
+        const apiUrl = `https://im3.annaabegglen.ch/etl/unload.php?date=${date}&time=${time}`;
+        const response = await fetch(apiUrl);
         
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok');
         }
-        
+
         const data = await response.json();
         console.log("API-Daten empfangen:", data);
         
@@ -21,7 +22,7 @@ async function fetchData() {
             updateBackgroundColor(temperature2m);
             displayWeatherImage(weatherCode);
             displayWurstImage(temperature2m);
-            moveWurstImages(summe, temperature2m); // Anpassung: Temperatur berücksichtigen
+            startWurstLoop(temperature2m); // Start the continuous loop
             updateButton(measuredAt);
         } else {
             console.log("Keine Daten verfügbar.");
@@ -83,7 +84,7 @@ function displaySentence(temperature2m, summe, weatherCode) {
             console.log("Unbekannter Wettercode:", weatherCode);
     }
 
-    const sentence = `Es ist ein ${description} Samstag, ${temperature2m} Grad und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.`;
+    const sentence = `Es ist ein ${description} Tag, ${temperature2m} Grad und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.`;
     document.getElementById('dataDisplay').innerText = sentence;
 }
 
@@ -97,7 +98,7 @@ function updateBackgroundColor(temperature2m) {
     } else if (temperature2m >= 5 && temperature2m <= 9.9) {
         backgroundColor = "#A5D2A6";
     } else if (temperature2m >= 10 && temperature2m <= 14.9) {
-        backgroundColor = "#FFBF80";
+        backgroundColor = "#FBF380";
     } else if (temperature2m >= 15 && temperature2m <= 19.9) {
         backgroundColor = "#FFB668";
     } else if (temperature2m >= 20) {
@@ -170,10 +171,15 @@ function displayWurstImage(temperature2m) {
     }
 }
 
+function startWurstLoop(temperature2m) {
+    setInterval(() => {
+        moveWurstImages(1, temperature2m);  // Move one wurst at a time in the loop
+    }, 1000); // Every 1 second, a new wurst enters the screen
+}
+
 function moveWurstImages(summe, temperature2m) {
     let wurstImage;
 
-    // Wähle nur das Bild basierend auf der Temperatur
     if (temperature2m < 10) {
         wurstImage = document.getElementById('Bratkalt');
     } else if (temperature2m >= 10 && temperature2m < 20) {
@@ -182,38 +188,29 @@ function moveWurstImages(summe, temperature2m) {
         wurstImage = document.getElementById('Bratheiss');
     }
 
-    // Wenn keine passende Bratwurst angezeigt werden soll, nichts tun
     if (!wurstImage) {
         return;
     }
 
-    // Lösche alle aktuellen dynamischen Wurst-Elemente, damit sie neu verteilt werden
-    document.querySelectorAll('.dynamic-wurst').forEach(img => img.remove());
+    const clonedImage = wurstImage.cloneNode(true);
+    clonedImage.style.display = 'block';
+    clonedImage.classList.add('dynamic-wurst');
 
-    // Basierend auf der Anzahl der Passanten, füge zufällig Wurst-Bilder hinzu
-    for (let i = 0; i < summe; i++) {
-        // Klone das Bild, um es mehrfach anzeigen zu können
-        const clonedImage = wurstImage.cloneNode(true);
-        clonedImage.style.display = 'block';
-        clonedImage.classList.add('dynamic-wurst'); // Füge Klasse für spätere Entfernung hinzu
+    const randomY = Math.floor(Math.random() * window.innerHeight);
+    const direction = Math.random() > 0.5 ? 'moveRight' : 'moveLeft';
+    const startPosition = direction === 'moveRight' ? '-10vw' : '110vw';
 
-        // Zufällige Höhe berechnen
-        const randomY = Math.floor(Math.random() * window.innerHeight);
+    clonedImage.style.top = `${randomY}px`;
+    clonedImage.style.left = startPosition;
+    clonedImage.style.animationName = direction;
+    clonedImage.style.animationDuration = `10s`;
+    clonedImage.style.animationDelay = `5s`;
 
-        // Bestimme, ob das Bild von links nach rechts oder von rechts nach links laufen soll
-        const direction = Math.random() > 0.5 ? 'moveRight' : 'moveLeft';
-        const startPosition = direction === 'moveRight' ? '-10vw' : '110vw';
+    document.body.appendChild(clonedImage);
 
-        // Setze die Startposition und die zufällige Höhe
-        clonedImage.style.top = `${randomY}px`;
-        clonedImage.style.left = startPosition;
-
-        // Füge die Animation hinzu
-        clonedImage.style.animationName = direction;
-        clonedImage.style.animationDuration = `${10 + Math.random() * 5}s`; // Zufällige Geschwindigkeit
-
-        document.body.appendChild(clonedImage);
-    }
+    setTimeout(() => {
+        clonedImage.remove();
+    }, 10000);
 }
 
 function updateButton(measuredAt) {
@@ -221,7 +218,20 @@ function updateButton(measuredAt) {
     button.innerText = measuredAt;
 }
 
+function updateFetchInterval() {
+    const dateInput = document.getElementById('dateInput').value;
+    const timeInput = document.getElementById('timeInput').value;
+
+    if (dateInput && timeInput) {
+        fetchData(dateInput, timeInput);
+        setInterval(() => {
+            fetchData(dateInput, timeInput);
+        }, 15 * 60 * 1000);
+    } else {
+        alert('Bitte Datum und Uhrzeit eingeben');
+    }
+}
+
 window.onload = () => {
-    fetchData();
-    setInterval(fetchData, 15 * 60 * 1000);
+    document.getElementById('fetchButton').addEventListener('click', updateFetchInterval);
 };
