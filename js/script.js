@@ -1,36 +1,40 @@
 async function fetchData(date, time) {
     try {
-        const apiUrl = `https://im3.annaabegglen.ch/etl/unload.php?date=${date}&time=${time}`;
+        let apiUrl = 'https://im3.annaabegglen.ch/etl/unload.php';
+
+        if (date && time) {
+            apiUrl += `?date=${date}&time=${time}`;
+        }
+
         const response = await fetch(apiUrl);
-        
+
         if (!response.ok) {
-            throw new Error('Netzwerkantwort war nicht ok');
+            throw new Error('Network response was not ok');
         }
 
         const data = await response.json();
-        console.log("API-Daten empfangen:", data);
-        
+        console.log("API data received:", data);
+
         if (data && data.length > 0) {
-            const measuredAt = data[0].measured_at.split(' ')[0]; // Nur Datum
+            const measuredAt = data[0].measured_at.split(' ')[0]; // Only date
             const summe = data[0].summe;
             const temperature2m = data[0].temperature_2m;
             const weatherCode = data[0].weather_code;
 
-            console.log(`Datum: ${measuredAt}, Temperatur: ${temperature2m}, Personen: ${summe}, Wettercode: ${weatherCode}`);
-            
+            console.log(`Date: ${measuredAt}, Temperature: ${temperature2m}, Pedestrians: ${summe}, Weather Code: ${weatherCode}`);
+
             displaySentence(temperature2m, summe, weatherCode);
             updateBackgroundColor(temperature2m);
             displayWeatherImage(weatherCode);
             displayWurstImage(temperature2m);
             startWurstLoop(temperature2m); // Start the continuous loop
-            updateButton(measuredAt);
         } else {
-            console.log("Keine Daten verfügbar.");
+            console.log("No data available.");
             document.getElementById('dataDisplay').innerText = 'Keine Daten verfügbar.';
         }
 
     } catch (error) {
-        console.error("Fehler beim Abrufen der Daten:", error);
+        console.error("Error fetching data:", error);
         document.getElementById('dataDisplay').innerText = 'Fehler beim Laden der Daten.';
     }
 }
@@ -81,7 +85,7 @@ function displaySentence(temperature2m, summe, weatherCode) {
             break;
         default:
             description = "unbekannter";
-            console.log("Unbekannter Wettercode:", weatherCode);
+            console.log("Unknown weather code:", weatherCode);
     }
 
     const sentence = `Es ist ein ${description} Tag, ${temperature2m} Grad und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.`;
@@ -111,7 +115,7 @@ function updateBackgroundColor(temperature2m) {
 function displayWeatherImage(weatherCode) {
     const images = document.querySelectorAll('.weather-image');
     images.forEach(img => img.style.display = 'none');
-    
+
     switch (weatherCode) {
         case 0:
             document.getElementById('Sonne').style.display = 'block';
@@ -154,7 +158,7 @@ function displayWeatherImage(weatherCode) {
             document.getElementById('Blitz').style.display = 'block';
             break;
         default:
-            console.log("Unbekannter Wettercode:", weatherCode);
+            console.log("Unknown weather code:", weatherCode);
     }
 }
 
@@ -213,11 +217,6 @@ function moveWurstImages(summe, temperature2m) {
     }, 10000);
 }
 
-function updateButton(measuredAt) {
-    const button = document.getElementById('measuredAtButton');
-    button.innerText = measuredAt;
-}
-
 function updateFetchInterval() {
     const dateInput = document.getElementById('dateInput').value;
     const timeInput = document.getElementById('timeInput').value;
@@ -233,5 +232,13 @@ function updateFetchInterval() {
 }
 
 window.onload = () => {
+    // Fetch the latest data when the page loads
+    fetchData();
+
+    // Set interval to fetch the latest data every 15 minutes
+    setInterval(() => {
+        fetchData();
+    }, 15 * 60 * 1000);
+
     document.getElementById('fetchButton').addEventListener('click', updateFetchInterval);
 };
