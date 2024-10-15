@@ -55,9 +55,18 @@ h1 {
     position: absolute;
     bottom: 18vw;
     left: 5vw;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Kadwa';
     font-size: 64px;
     margin: 0;
     color: #000;
+}
+
+#dataDisplay {
+    font-family: 'Kadwa';
+    font-size: 16px; /* Passe die Schriftgröße nach Bedarf an */
+    color: #000; /* Passe die Textfarbe an */
+    position: absolute;
+    bottom: 15vw;
+    left: 5vw;
 }
 
