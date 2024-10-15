@@ -13,16 +13,16 @@
     <!-- Platzhalter für den Satz -->
     <p id="dataDisplay">Lade Daten...</p>
 
-    <!-- Eingabefelder für Datum und Uhrzeit -->
-    <label for="dateInput"></label> 
-    <input type="date" id="dateInput" required>
+    <!-- Eingabefelder für Datum und Uhrzeit sowie Button -->
+    <div id="fetchControls">
+        <label for="dateInput"></label>
+        <input type="date" id="dateInput" required>
     
-    <label for="timeInput"></label>
-    <input type="time" id="timeInput" required>
+        <label for="timeInput"></label>
+        <input type="time" id="timeInput" required>
     
-    <!-- Button zum Abrufen der Daten -->
-    <button id="fetchButton">Daten abrufen</button>
-    
+        <button id="fetchButton">Daten abrufen</button>
+    </div>
     <!-- Wettercode-Bilder -->
     <img id="Sonne" src="images/Sonne.png" alt="Sonne" class="weather-image" style="display:none;">
     <img id="Wolke" src="images/Sonnenwolke.png" alt="Sonnenwolke" class="weather-image" style="display:none;">

@@ -70,3 +70,31 @@ h1 {
     left: 5vw;
 }
 
+#fetchControls {
+    position: absolute;
+    bottom: 7vw; /* Abstand vom unteren Rand */
+    left: 5vw;   /* Gleicher Abstand von der linken Seite wie bei h1 */
+    font-family: 'Kadwa'; /* Gleiche Schriftart */
+    font-size: 18px; /* Passe die Schriftgröße an */
+}
+
+#fetchControls input {
+    margin: 10px;
+    padding: 5px;
+    font-size: 18px;
+}
+
+#fetchButton {
+    margin: 10px;
+    padding: 5px 10px;
+    font-size: 18px;
+    background-color: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#fetchButton:hover {
+    background-color: white;
+}
