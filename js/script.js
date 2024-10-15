@@ -42,6 +42,7 @@ async function fetchData(date, time) {
 function displaySentence(temperature2m, summe, weatherCode) {
     let description = "";
 
+    // Bestimme die Wetterbeschreibung basierend auf dem Wettercode
     switch (weatherCode) {
         case 0:
             description = "sonniger";
@@ -88,8 +89,19 @@ function displaySentence(temperature2m, summe, weatherCode) {
             console.log("Unknown weather code:", weatherCode);
     }
 
-    const sentence = `Es ist ein ${description} Tag, ${temperature2m} Grad und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.`;
-    document.getElementById('dataDisplay').innerText = sentence;
+    // Passantenfrequenz bewerten
+    let frequencyComment = "";
+    if (summe > 100) {
+        frequencyComment = "Die Passant*innenfrequenz liegt über dem Durchschnitt.";
+    } else if (summe >= 50 && summe <= 100) {
+        frequencyComment = "Die Passant*innenfrequenz liegt etwa beim Durchschnitt.";
+    } else {
+        frequencyComment = "Die Passant*innenfrequenz liegt unter dem Durchschnitt.";
+    }
+
+    // Setze den finalen Satz zusammen mit den Zeilenumbrüchen
+    const sentence = `Es ist ein ${description} Tag, ${temperature2m} Grad<br> und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
+    document.getElementById('dataDisplay').innerHTML = sentence;
 }
 
 function updateBackgroundColor(temperature2m) {

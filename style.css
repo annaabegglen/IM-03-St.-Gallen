@@ -63,10 +63,10 @@ h1 {
 
 #dataDisplay {
     font-family: 'Kadwa';
-    font-size: 16px; /* Passe die Schriftgröße nach Bedarf an */
+    font-size: 24px; /* Passe die Schriftgröße nach Bedarf an */
     color: #000; /* Passe die Textfarbe an */
     position: absolute;
-    bottom: 15vw;
+    bottom: 9vw;
     left: 5vw;
 }
 
