@@ -174,3 +174,12 @@ canvas {
         font-size: 12px;
     }
 }
+
+/* Für die Senftube */
+#senftube {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    pointer-events: none; /* Verhindert, dass das Bild Mausinteraktionen blockiert */
+    transform: translate(-50%, -50%); /* Um die Bildmitte auf den Mauszeiger auszurichten */
+}
