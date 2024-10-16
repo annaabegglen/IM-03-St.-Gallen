@@ -1,3 +1,11 @@
+// Mausbewegung für die Senftube
+document.addEventListener('mousemove', function(event) {
+    const senftube = document.getElementById('senftube');
+    senftube.style.left = event.pageX + 'px';
+    senftube.style.top = event.pageY + 'px';
+});
+
+// Funktion, um Daten zu laden
 async function fetchData(date, time) {
     try {
         let apiUrl = 'https://im3.annaabegglen.ch/etl/unload.php';
@@ -67,29 +75,42 @@ function getTimeOfDay(timePart) {
 }
 
 function displaySentence(temperature2m, summe, weatherCode, timeOfDay) {
-    let description = getWeatherDescription(weatherCode);
+    let description = getWeatherDescription(weatherCode, timeOfDay);
     let frequencyComment = getFrequencyComment(summe);
 
-    const sentence = `Es ist ein ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
+    // Unterscheide den Artikel basierend auf der Tageszeit
+    const article = timeOfDay === "Nacht" ? "eine" : "ein";
+    const sentence = `Es ist ${article} ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
     document.getElementById('dataDisplay').innerHTML = sentence;
 }
 
 function displayPastSentence(temperature2m, summe, weatherCode, timeOfDay) {
-    let description = getWeatherDescription(weatherCode);
+    let description = getWeatherDescription(weatherCode, timeOfDay);
     let frequencyComment = getFrequencyComment(summe);
 
-    const sentence = `Es war ein ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es waren ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
+    // Unterscheide den Artikel basierend auf der Tageszeit
+    const article = timeOfDay === "Nacht" ? "eine" : "ein";
+    const sentence = `Es war ${article} ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es waren ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
     document.getElementById('dataDisplay').innerHTML = sentence;
 }
 
-function getWeatherDescription(weatherCode) {
+// Passe die Wetterbeschreibung abhängig von der Tageszeit an
+function getWeatherDescription(weatherCode, timeOfDay) {
+    let description = "";
+
     switch (weatherCode) {
-        case 0: return "sonniger";
+        case 0:
+            description = timeOfDay === "Nacht" ? "klare" : "sonniger";
+            break;
         case 1:
         case 2:
-        case 3: return "bewölkter";
+        case 3:
+            description = timeOfDay === "Nacht" ? "bewölkte" : "bewölkter";
+            break;
         case 45:
-        case 48: return "nebliger";
+        case 48:
+            description = timeOfDay === "Nacht" ? "neblige" : "nebliger";
+            break;
         case 51:
         case 53:
         case 55:
@@ -102,18 +123,28 @@ function getWeatherDescription(weatherCode) {
         case 67:
         case 80:
         case 81:
-        case 82: return "regnerischer";
+        case 82:
+            description = timeOfDay === "Nacht" ? "regnerische" : "regnerischer";
+            break;
         case 71:
         case 73:
         case 75:
         case 77:
         case 85:
-        case 86: return "schneereicher";
+        case 86:
+            description = timeOfDay === "Nacht" ? "schneereiche" : "schneereicher";
+            break;
         case 95:
         case 96:
-        case 99: return "gewittriger";
-        default: return "unbekannter";
+        case 99:
+            description = timeOfDay === "Nacht" ? "gewittrige" : "gewittriger";
+            break;
+        default:
+            description = timeOfDay === "Nacht" ? "unbekannte" : "unbekannter";
+            console.log("Unknown weather code:", weatherCode);
     }
+
+    return description;
 }
 
 function getFrequencyComment(summe) {
