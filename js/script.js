@@ -5,43 +5,37 @@ document.addEventListener('mousemove', function(event) {
     senftube.style.top = event.pageY + 'px';
 });
 
-// Array, um die Bratwürste zu speichern
-let bratwursts = [];
-const bratwurstSpeed = 2;
-const bratwurstImages = { kalt: null, warm: null, heiss: null }; // Speichert nur die richtigen Bilder
-const bratwurstSize = 30; // Kleinere Bratwürste
-
-// Canvas-Element und 2D-Kontext holen
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
-
-// Statische Elemente, die nicht berührt werden dürfen (h1, dataDisplay, fetchControls)
-const staticElements = [
-    { x: 5, y: 450, width: 400, height: 50 }, // h1 Bereich
-    { x: 5, y: 500, width: 400, height: 30 }, // dataDisplay Bereich
-    { x: 5, y: 530, width: 400, height: 50 }  // fetchControls Bereich
-];
+// Bratwurstbilder
+const bratwurstImages = {
+    kalt: null,
+    warm: null,
+    heiss: null
+};
 
 // Bratwurstbilder laden
 function loadBratwurstImages() {
-    const imgKalt = new Image();
-    const imgWarm = new Image();
-    const imgHeiss = new Image();
-    
-    imgKalt.src = 'images/Bratwurst kalt.png';
-    imgWarm.src = 'images/Bratwurst warm.png';
-    imgHeiss.src = 'images/Bratwurst heiss.png';
-    
-    bratwurstImages.kalt = imgKalt;
-    bratwurstImages.warm = imgWarm;
-    bratwurstImages.heiss = imgHeiss;
+    bratwurstImages.kalt = new Image();
+    bratwurstImages.warm = new Image();
+    bratwurstImages.heiss = new Image();
+
+    bratwurstImages.kalt.src = 'images/Bratwurst kalt.png';
+    bratwurstImages.warm.src = 'images/Bratwurst warm.png';
+    bratwurstImages.heiss.src = 'images/Bratwurst heiss.png';
 }
 
-// Funktion, um dynamisch basierend auf der Anzahl der Passanten Bratwürste zu erstellen
-function createBratwursts(summe, temperature) {
-    bratwursts = []; // Bratwürste-Array leeren
+// Array für die Bratwürste
+let bratwursts = [];
 
-    // Bestimme, welches Bild verwendet werden soll, basierend auf der Temperatur
+// Funktion, um die Bratwürste anzuzeigen und ihre Bewegung zu initialisieren
+function displayBratwursts(summe, temperature) {
+    // Alte Bratwürste entfernen
+    bratwursts.forEach(bratwurst => {
+        document.body.removeChild(bratwurst.element);
+    });
+
+    bratwursts = []; // Leere das Array der Bratwürste
+
+    // Wähle das richtige Bild basierend auf der Temperatur
     let bratwurstImage = null;
     if (temperature < 10) {
         bratwurstImage = bratwurstImages.kalt;
@@ -51,66 +45,73 @@ function createBratwursts(summe, temperature) {
         bratwurstImage = bratwurstImages.heiss;
     }
 
+    // Bratwürste erstellen und initialisieren
     for (let i = 0; i < summe; i++) {
         const bratwurst = {
-            x: Math.random() * (canvas.width - bratwurstSize),
-            y: Math.random() * (canvas.height - bratwurstSize),
-            width: bratwurstSize,
-            height: bratwurstSize,
-            image: bratwurstImage,
-            dx: (Math.random() - 0.5) * bratwurstSpeed,
-            dy: (Math.random() - 0.5) * bratwurstSpeed
+            element: document.createElement('img'),
+            x: Math.random() * (window.innerWidth - 50), // Zufällige x-Position
+            y: Math.random() * (window.innerHeight - 50), // Zufällige y-Position
+            dx: (Math.random() - 0.5) * 0.5, // Langsame zufällige x-Richtung
+            dy: (Math.random() - 0.5) * 0.5 // Langsame zufällige y-Richtung
         };
 
-        bratwursts.push(bratwurst);
+        bratwurst.element.src = bratwurstImage.src; // Setze die Bildquelle
+        bratwurst.element.style.position = 'absolute';
+        bratwurst.element.style.width = '30px'; // Setze die Breite
+        bratwurst.element.style.height = 'auto'; // Behalte das Seitenverhältnis bei
+        document.body.appendChild(bratwurst.element); // Füge das Bild dem Body hinzu
+
+        bratwursts.push(bratwurst); // Füge die Bratwurst zum Array hinzu
     }
+
+    // Bewegung der Bratwürste starten
+    moveBratwursts();
 }
 
-// Bratwürste zeichnen
-function drawBratwursts() {
-    bratwursts.forEach(bratwurst => {
-        ctx.drawImage(bratwurst.image, bratwurst.x, bratwurst.y, bratwurst.width, bratwurst.height);
-    });
-}
-
-// Bewegung der Bratwürste
+// Funktion, um die Bratwürste zu bewegen
 function moveBratwursts() {
     bratwursts.forEach(bratwurst => {
-        // Bewegung aktualisieren
+        // Aktualisiere die Position
         bratwurst.x += bratwurst.dx;
         bratwurst.y += bratwurst.dy;
 
-        // Kollision mit Canvas-Rand erkennen
-        if (bratwurst.x <= 0 || bratwurst.x + bratwurst.width >= canvas.width) {
+        // Kollision mit Fenster-Rand erkennen
+        if (bratwurst.x <= 0 || bratwurst.x + 30 >= window.innerWidth) {
             bratwurst.dx *= -1; // Richtung ändern
         }
-        if (bratwurst.y <= 0 || bratwurst.y + bratwurst.height >= canvas.height) {
+        if (bratwurst.y <= 0 || bratwurst.y + 30 >= window.innerHeight) {
             bratwurst.dy *= -1; // Richtung ändern
         }
 
-        // Kollision mit statischen Elementen erkennen und vermeiden
-        staticElements.forEach(element => {
-            if (bratwurst.x < element.x + element.width &&
-                bratwurst.x + bratwurst.width > element.x &&
-                bratwurst.y < element.y + element.height &&
-                bratwurst.y + bratwurst.height > element.y) {
-                bratwurst.dx *= -1; // Richtung ändern
-                bratwurst.dy *= -1; // Richtung ändern
-            }
-        });
-    });
-}
+        // Setze die neue Position des Bildes
+        bratwurst.element.style.left = bratwurst.x + 'px';
+        bratwurst.element.style.top = bratwurst.y + 'px';
 
-// Canvas-Animation
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvas leeren
-    moveBratwursts(); // Bratwürste bewegen
-    drawBratwursts(); // Bratwürste zeichnen
-    requestAnimationFrame(animate); // Wiederholen
+        // Abstand zum Cursor prüfen
+        const cursorX = parseFloat(senftube.style.left);
+        const cursorY = parseFloat(senftube.style.top);
+        const distanceToCursor = Math.sqrt(Math.pow(bratwurst.x - cursorX, 2) + Math.pow(bratwurst.y - cursorY, 2));
+
+        // Wenn die Bratwurst zu nah am Cursor ist, bewege sie sanft weg
+        if (distanceToCursor < 100) {
+            const avoidanceSpeed = 1; // Geschwindigkeit des Ausweichens
+            if (bratwurst.x < cursorX) {
+                bratwurst.x -= avoidanceSpeed; // Weiche nach links aus
+            } else if (bratwurst.x > cursorX) {
+                bratwurst.x += avoidanceSpeed; // Weiche nach rechts aus
+            }
+            if (bratwurst.y < cursorY) {
+                bratwurst.y -= avoidanceSpeed; // Weiche nach oben aus
+            } else if (bratwurst.y > cursorY) {
+                bratwurst.y += avoidanceSpeed; // Weiche nach unten aus
+            }
+        }
+    });
+
+    requestAnimationFrame(moveBratwursts); // Bewege die Bratwürste kontinuierlich
 }
 
 // Wetterdaten und Fußgängerabfrage
-
 async function fetchData(date, time) {
     try {
         let apiUrl = 'https://im3.annaabegglen.ch/etl/unload.php';
@@ -148,7 +149,7 @@ async function fetchData(date, time) {
 
             updateBackgroundColor(temperature2m);
             displayWeatherImage(weatherCode, timeOfDay);
-            createBratwursts(summe, temperature2m); // Bratwürste entsprechend der Temperatur anzeigen
+            displayBratwursts(summe, temperature2m); // Bratwürste entsprechend der Temperatur anzeigen
         } else {
             console.log("No data available.");
             document.getElementById('dataDisplay').innerText = 'Keine Daten verfügbar.';
@@ -326,6 +327,4 @@ window.onload = () => {
             alert('Bitte Datum und Uhrzeit eingeben');
         }
     });
-
-    animate(); // Animation starten
 };

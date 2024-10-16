@@ -15,16 +15,17 @@ body {
     width: 9vw;
     height: auto;
     display: none;
+    z-index: 1; /* Sicherstellen, dass das Wetterbild über den Bratwürsten ist */
 }
 
 .wurst-image {
-    position: relative;
+    position: absolute; /* Absolute Positionierung für die Bratwürste */
     width: 2vw;
     height: auto;
-    display: inline-block;
-    margin: 0.5vw;
+    z-index: -1; /* Setzt die Bratwürste hinter andere Elemente */
 }
 
+/* Schriftarten */
 @font-face {
     font-family: 'KadwaBold';
     src: url('fonts/Kadwa-Bold.ttf') format('truetype');
@@ -39,6 +40,7 @@ body {
     font-style: normal;
 }
 
+/* Titel */
 h1 {
     position: absolute;
     bottom: 16vw;
@@ -47,8 +49,10 @@ h1 {
     font-size: 64px;
     margin: 0;
     color: #000;
+    z-index: 1; /* Sicherstellen, dass der Titel über den Bratwürsten ist */
 }
 
+/* Platzhalter für den Satz */
 #dataDisplay {
     font-family: 'KadwaRegular';
     font-size: 24px;
@@ -57,8 +61,10 @@ h1 {
     bottom: 11vw;
     left: 5vw;
     line-height: 1.2;
+    z-index: 1; /* Sicherstellen, dass der Platzhalter über den Bratwürsten ist */
 }
 
+/* Eingabefelder für Datum und Uhrzeit sowie Button */
 #fetchControls {
     position: absolute;
     bottom: 7vw;
@@ -70,6 +76,7 @@ h1 {
     align-items: center;
     gap: 10px;
     width: auto;
+    z-index: 1; /* Sicherstellen, dass die Steuerungselemente über den Bratwürsten sind */
 }
 
 /* Rundes Design für Input-Felder und Button */
@@ -97,89 +104,17 @@ h1 {
     background-color: #c6c4c4;
 }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+/* Hover-Effekte für den Senftube */
+#fetchControls:hover ~ #senftube,
+#fetchButton:hover ~ #senftube {
+    display: none;
 }
 
-#canvas-container {
-    flex: 1;
-    position: relative;
-}
-
-canvas {
-    border: 1px solid black;
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-#wurstContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    position: absolute;
-    bottom: 30vw;
-    width: 100%;
-}
-
+/* Senftube */
 #senftube {
     position: absolute;
-    width: 100px;
-    height: auto;
-    pointer-events: none; /* Verhindert, dass das Bild Mausinteraktionen blockiert */
-    transform: translate(-50%, -50%); /* Um die Bildmitte auf den Mauszeiger auszurichten */
-}
-
-@media screen and (max-width: 600px) {
-    .weather-image {
-        top: 5vh;
-        right: 5vh;
-        width: 9vh;
-    }
-
-    .wurst-image {
-        width: 2.5vh;
-    }
-
-    h1 {
-        bottom: 18vh;
-        left: 5vh;
-        font-size: 32px;
-    }
-
-    #dataDisplay {
-        font-size: 16px;
-        bottom: 9vh;
-        left: 5vh;
-    }
-
-    #fetchControls {
-        bottom: 7vh;
-        left: 5vh;
-        font-size: 12px;
-    }
-
-    #fetchControls input {
-        padding: 5px;
-        font-size: 12px;
-        width: 70px;
-    }
-
-    #fetchButton {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
-}
-
-/* Für die Senftube */
-#senftube {
-    position: absolute;
-    width: 100px;
-    height: auto;
-    pointer-events: none; /* Verhindert, dass das Bild Mausinteraktionen blockiert */
-    transform: translate(-50%, -50%); /* Um die Bildmitte auf den Mauszeiger auszurichten */
+    width: 2.5vw !important;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Sicherstellen, dass der Senftube über den Bratwürsten ist */
 }
