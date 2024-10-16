@@ -118,3 +118,191 @@ h1 {
     transform: translate(-50%, -50%);
     z-index: 1; /* Sicherstellen, dass der Senftube über den Bratwürsten ist */
 }
+
+
+/* RESPONSIVE DESIGN */
+
+/* Grundlegende Stile */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif; /* Grundschriftart */
+}
+
+/* Für mobile Geräte */
+@media only screen and (max-width: 375px) {
+    body {
+        font-size: 14px; /* Kleinere Schriftgröße für mobile Geräte */
+        padding: 10px; /* Innenabstand */
+        background-color: #f9f9f9; /* Hintergrundfarbe für bessere Lesbarkeit */
+    }
+
+    h1 {
+        font-size: 1.5em; /* Kleinere Überschrift für mobile */
+        text-align: center; /* Zentrieren der Überschrift */
+    }
+
+    #dataDisplay {
+        font-size: 1em; /* Schriftgröße für den Datenanzeigebereich */
+        margin-top: 10px; /* Abstand oben */
+        text-align: center; /* Zentrieren des Textes */
+    }
+
+    #fetchControls {
+        display: flex;
+        flex-direction: column; /* Stapelt die Eingabefelder */
+        align-items: center; /* Zentriert die Eingabefelder */
+        margin-top: 15px; /* Abstand oben */
+    }
+
+    #fetchControls input {
+        margin-bottom: 10px; /* Abstand zwischen den Eingabefeldern */
+        padding: 8px; /* Mehr Platz in den Eingabefeldern */
+        width: 100%; /* Vollständige Breite */
+        max-width: 300px; /* Maximalbreite für Eingabefelder */
+        border: 1px solid #ccc; /* Rahmen für Eingabefelder */
+        border-radius: 4px; /* Abgerundete Ecken */
+    }
+
+    #fetchButton {
+        padding: 10px 15px; /* Mehr Platz im Button */
+        font-size: 1em; /* Größere Schriftgröße für den Button */
+        cursor: pointer; /* Zeigt den Mauszeiger beim Überfahren an */
+        background-color: #4CAF50; /* Grüner Hintergrund für den Button */
+        color: white; /* Schriftfarbe */
+        border: none; /* Kein Rahmen */
+        border-radius: 4px; /* Abgerundete Ecken */
+    }
+
+    /* Stil für Wetterbilder */
+    .weather-image {
+        max-width: 80px; /* Maximalbreite für Wetterbilder */
+        display: block; /* Block-Layout für bessere Zentrierung */
+        margin: 10px auto; /* Zentrieren der Bilder mit Abstand */
+    }
+
+    #senftube {
+        width: 40px; /* Größe der Senftube anpassen */
+        position: absolute; /* Positionierung anpassen */
+    }
+}
+
+
+/* Für Tablets */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    body {
+        font-size: 16px;
+        padding: 20px; /* Mehr Abstand für Tablets */
+    }
+
+    h1 {
+        font-size: 1.8em; /* Größere Überschrift */
+    }
+
+    #dataDisplay {
+        font-size: 1.2em; /* Größere Schrift für den Datenanzeigebereich */
+        margin-top: 15px; /* Abstand oben */
+    }
+
+    #fetchControls {
+        display: flex;
+        flex-direction: column; /* Stapelt die Eingabefelder */
+        align-items: flex-start; /* Linksbündig */
+        margin-top: 20px;
+    }
+
+    #fetchControls input {
+        margin-bottom: 10px; /* Abstand zwischen den Eingabefeldern */
+        padding: 10px; /* Mehr Platz in den Eingabefeldern */
+        width: 100%; /* Vollständige Breite */
+        max-width: 300px; /* Maximalbreite für Eingabefelder */
+    }
+
+    #fetchButton {
+        padding: 10px 15px; /* Mehr Platz im Button */
+        font-size: 1em; /* Größere Schriftgröße für den Button */
+        cursor: pointer; /* Zeigt den Mauszeiger beim Überfahren an */
+    }
+
+    /* Stil für Wetterbilder */
+    .weather-image {
+        max-width: 100px; /* Maximalbreite für Wetterbilder */
+    }
+
+    #senftube {
+        width: 50px; /* Größe der Senftube anpassen */
+    }
+}
+
+/* Für Desktops */
+@media only screen and (min-width: 1280px) {
+    body {
+        font-size: 18px; /* Größere Schriftgröße für Desktops */
+        padding: 30px; /* Mehr Abstand für Desktops */
+    }
+
+    h1 {
+        font-size: 2em; /* Größere Überschrift für Desktops */
+        text-align: left; /* Links ausrichten für Desktops */
+    }
+
+    #dataDisplay {
+        font-size: 1.5em; /* Größere Schrift für den Datenanzeigebereich */
+        margin-top: 20px; /* Abstand oben */
+        text-align: left; /* Links ausrichten für Desktops */
+    }
+
+    #fetchControls {
+        display: flex;
+        justify-content: flex-start; /* Links ausrichten */
+        margin-top: 25px; /* Abstand oben */
+    }
+
+    #fetchControls input {
+        margin-right: 10px; /* Abstand zwischen den Eingabefeldern */
+        padding: 12px; /* Mehr Platz in den Eingabefeldern */
+        max-width: 150px; /* Maximalbreite für Eingabefelder */
+    }
+
+    #fetchButton {
+        padding: 12px 20px; /* Mehr Platz im Button */
+        font-size: 1.1em; /* Größere Schriftgröße für den Button */
+    }
+
+    /* Stil für Wetterbilder */
+    .weather-image {
+        max-width: 120px; /* Maximalbreite für Wetterbilder */
+    }
+
+    #senftube {
+        width: 60px; /* Größe der Senftube anpassen */
+    }
+}
+
+/* Für große Bildschirme */
+@media only screen and (min-width: 1920px) {
+    body {
+        font-size: 20px; /* Größere Schriftgröße für große Bildschirme */
+        padding: 40px; /* Mehr Abstand für große Bildschirme */
+    }
+
+    h1 {
+        font-size: 2.5em; /* Sehr große Überschrift für große Bildschirme */
+    }
+
+    #dataDisplay {
+        font-size: 1.8em; /* Größere Schrift für den Datenanzeigebereich */
+    }
+
+    #fetchControls {
+        margin-top: 30px; /* Abstand oben */
+    }
+
+    #fetchControls input {
+        max-width: 200px; /* Maximalbreite für Eingabefelder */
+    }
+
+    #fetchButton {
+        padding: 15px 25px; /* Mehr Platz im Button */
+    }
+}
