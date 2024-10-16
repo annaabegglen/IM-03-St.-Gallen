@@ -20,7 +20,22 @@ if (isset($pedestrian_data['results']) && is_array($pedestrian_data['results']))
     
     // Extrahiere die relevanten Fußgängerdaten
     $summe = isset($newest_entry['summe']) ? $newest_entry['summe'] : null;
-    $pedestrian_measured_at = isset($newest_entry['measured_at_new']) ? $newest_entry['measured_at_new'] : date('Y-m-d H:i:s');
+    
+    // Zeitumrechnung: Annahme, dass 'measured_at_new' in UTC ist
+    if (isset($newest_entry['measured_at_new'])) {
+        $pedestrian_measured_at_utc = $newest_entry['measured_at_new'];
+        
+        // Erstelle ein DateTime-Objekt in UTC
+        $date = new DateTime($pedestrian_measured_at_utc, new DateTimeZone('UTC'));
+        
+        // Wandle die Zeit in die lokale Zeitzone (z.B. Europe/Zurich) um
+        $date->setTimezone(new DateTimeZone('Europe/Zurich')); // Setzt die Zeit auf UTC+2 (MEZ/MESZ)
+        
+        // Formatiere die Zeit für die Speicherung
+        $pedestrian_measured_at = $date->format('Y-m-d H:i:s');
+    } else {
+        $pedestrian_measured_at = date('Y-m-d H:i:s'); // Fallback zur aktuellen Zeit
+    }
 } else {
     echo "Keine Fußgängerdaten verfügbar.";
     $summe = null;
@@ -30,34 +45,11 @@ if (isset($pedestrian_data['results']) && is_array($pedestrian_data['results']))
 // Wetterdaten verarbeiten
 $weather = include('extractweather.php');
 
-// Ermittelt den neuesten Zeitpunkt in den Wetterdaten
-// $latest_weather_index = null;
-// $current_time = time();
-
-// foreach ($weather['hourly']['time'] as $index => $weather_time) {
-//     $weather_timestamp = strtotime($weather_time);
-//     // Finde den Eintrag, der am nächsten zur aktuellen Zeit ist
-//     if ($weather_timestamp <= $current_time && (is_null($latest_weather_index) || $weather_timestamp > strtotime($weather['hourly']['time'][$latest_weather_index]))) {
-//         $latest_weather_index = $index;
-//     }
-// }
-
 $temperature = $weather['current']['temperature_2m'];
 $weather_code = $weather['current']['weather_code'];
 
 echo "Temperatur: " . $temperature . "°C\n";
 echo "Wettercode: " . $weather_code . "\n";
-
-// if ($latest_weather_index !== null) {
-//     $weather_measured_at = $weather['hourly']['time'][$latest_weather_index];
-//     $temperature = $weather['hourly']['temperature_2m'][$latest_weather_index];
-//     $weather_code = $weather['hourly']['weather_code'][$latest_weather_index];
-// } else {
-//     echo "Keine aktuellen Wetterdaten verfügbar.";
-//     $weather_measured_at = null;
-//     $temperature = null;
-//     $weather_code = null;
-// }
 
 // Überprüfen, ob alle notwendigen Daten vorhanden sind
 if ($pedestrian_measured_at && $summe && $temperature && $weather_code) {

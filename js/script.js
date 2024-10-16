@@ -16,18 +16,26 @@ async function fetchData(date, time) {
         console.log("API data received:", data);
 
         if (data && data.length > 0) {
-            const measuredAt = data[0].measured_at.split(' ')[0]; // Only date
+            const measuredAt = data[0].measured_at.split(' ');
+            const datePart = measuredAt[0];
+            const timePart = measuredAt[1];
             const summe = data[0].summe;
             const temperature2m = data[0].temperature_2m;
             const weatherCode = data[0].weather_code;
 
-            console.log(`Date: ${measuredAt}, Temperature: ${temperature2m}, Pedestrians: ${summe}, Weather Code: ${weatherCode}`);
+            console.log(`Date: ${datePart}, Time: ${timePart}, Temperature: ${temperature2m}, Pedestrians: ${summe}, Weather Code: ${weatherCode}`);
 
-            displaySentence(temperature2m, summe, weatherCode);
+            const timeOfDay = getTimeOfDay(timePart);
+
+            if (date && time) {
+                displayPastSentence(temperature2m, summe, weatherCode, timeOfDay); // Vergangenheitsform
+            } else {
+                displaySentence(temperature2m, summe, weatherCode, timeOfDay); // Gegenwart
+            }
+
             updateBackgroundColor(temperature2m);
-            displayWeatherImage(weatherCode);
-            displayWurstImage(temperature2m);
-            startWurstLoop(temperature2m); // Start the continuous loop
+            displayWeatherImage(weatherCode, timeOfDay);
+            displayWurstImage(temperature2m, summe);
         } else {
             console.log("No data available.");
             document.getElementById('dataDisplay').innerText = 'Keine Daten verfügbar.';
@@ -39,23 +47,49 @@ async function fetchData(date, time) {
     }
 }
 
-function displaySentence(temperature2m, summe, weatherCode) {
-    let description = "";
+function getTimeOfDay(timePart) {
+    const hour = parseInt(timePart.split(':')[0]);
+    let timeOfDay = "";
 
-    // Bestimme die Wetterbeschreibung basierend auf dem Wettercode
+    if (hour >= 5 && hour < 11) {
+        timeOfDay = "Morgen";
+    } else if (hour >= 11 && hour < 13) {
+        timeOfDay = "Mittag";
+    } else if (hour >= 13 && hour < 17) {
+        timeOfDay = "Nachmittag";
+    } else if (hour >= 17 && hour < 21) {
+        timeOfDay = "Abend";
+    } else {
+        timeOfDay = "Nacht";
+    }
+
+    return timeOfDay;
+}
+
+function displaySentence(temperature2m, summe, weatherCode, timeOfDay) {
+    let description = getWeatherDescription(weatherCode);
+    let frequencyComment = getFrequencyComment(summe);
+
+    const sentence = `Es ist ein ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
+    document.getElementById('dataDisplay').innerHTML = sentence;
+}
+
+function displayPastSentence(temperature2m, summe, weatherCode, timeOfDay) {
+    let description = getWeatherDescription(weatherCode);
+    let frequencyComment = getFrequencyComment(summe);
+
+    const sentence = `Es war ein ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es waren ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
+    document.getElementById('dataDisplay').innerHTML = sentence;
+}
+
+function getWeatherDescription(weatherCode) {
     switch (weatherCode) {
-        case 0:
-            description = "sonniger";
-            break;
+        case 0: return "sonniger";
         case 1:
         case 2:
-        case 3:
-            description = "bewölkter";
-            break;
+        case 3: return "bewölkter";
         case 45:
-        case 48:
-            description = "nebliger";
-            break;
+        case 48: return "nebliger";
         case 51:
         case 53:
         case 55:
@@ -68,40 +102,28 @@ function displaySentence(temperature2m, summe, weatherCode) {
         case 67:
         case 80:
         case 81:
-        case 82:
-            description = "regnerischer";
-            break;
+        case 82: return "regnerischer";
         case 71:
         case 73:
         case 75:
         case 77:
         case 85:
-        case 86:
-            description = "schneereicher";
-            break;
+        case 86: return "schneereicher";
         case 95:
         case 96:
-        case 99:
-            description = "gewittriger";
-            break;
-        default:
-            description = "unbekannter";
-            console.log("Unknown weather code:", weatherCode);
+        case 99: return "gewittriger";
+        default: return "unbekannter";
     }
+}
 
-    // Passantenfrequenz bewerten
-    let frequencyComment = "";
+function getFrequencyComment(summe) {
     if (summe > 100) {
-        frequencyComment = "Die Passant*innenfrequenz liegt über dem Durchschnitt.";
+        return "Die Passant*innenfrequenz liegt über dem Durchschnitt.";
     } else if (summe >= 50 && summe <= 100) {
-        frequencyComment = "Die Passant*innenfrequenz liegt etwa beim Durchschnitt.";
+        return "Die Passant*innenfrequenz liegt etwa beim Durchschnitt.";
     } else {
-        frequencyComment = "Die Passant*innenfrequenz liegt unter dem Durchschnitt.";
+        return "Die Passant*innenfrequenz liegt unter dem Durchschnitt.";
     }
-
-    // Setze den finalen Satz zusammen mit den Zeilenumbrüchen
-    const sentence = `Es ist ein ${description} Tag, ${temperature2m} Grad<br> und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
-    document.getElementById('dataDisplay').innerHTML = sentence;
 }
 
 function updateBackgroundColor(temperature2m) {
@@ -124,109 +146,72 @@ function updateBackgroundColor(temperature2m) {
     document.body.style.backgroundColor = backgroundColor;
 }
 
-function displayWeatherImage(weatherCode) {
+function displayWeatherImage(weatherCode, timeOfDay) {
     const images = document.querySelectorAll('.weather-image');
     images.forEach(img => img.style.display = 'none');
 
-    switch (weatherCode) {
-        case 0:
-            document.getElementById('Sonne').style.display = 'block';
-            break;
-        case 1:
-        case 2:
-        case 3:
-            document.getElementById('Wolke').style.display = 'block';
-            break;
-        case 45:
-        case 48:
-            document.getElementById('Nebel').style.display = 'block';
-            break;
-        case 51:
-        case 53:
-        case 55:
-        case 56:
-        case 57:
-        case 61:
-        case 63:
-        case 65:
-        case 66:
-        case 67:
-        case 80:
-        case 81:
-        case 82:
-            document.getElementById('Regen').style.display = 'block';
-            break;
-        case 71:
-        case 73:
-        case 75:
-        case 77:
-        case 85:
-        case 86:
-            document.getElementById('Schnee').style.display = 'block';
-            break;
-        case 95:
-        case 96:
-        case 99:
-            document.getElementById('Blitz').style.display = 'block';
-            break;
-        default:
-            console.log("Unknown weather code:", weatherCode);
+    if (timeOfDay === "Abend" || timeOfDay === "Nacht") {
+        if (weatherCode === 1 || weatherCode === 2 || weatherCode === 3) {
+            document.getElementById('Mondwolke').style.display = 'block';
+        } else {
+            document.getElementById('Mond').style.display = 'block';
+        }
+    } else {
+        switch (weatherCode) {
+            case 0: document.getElementById('Sonne').style.display = 'block'; break;
+            case 1:
+            case 2: document.getElementById('Sonnenwolke').style.display = 'block'; break;
+            case 3: document.getElementById('Wolke').style.display = 'block'; break;
+            case 45:
+            case 48: document.getElementById('Nebel').style.display = 'block'; break;
+            case 51:
+            case 53:
+            case 55:
+            case 56:
+            case 57:
+            case 61:
+            case 63:
+            case 65:
+            case 66:
+            case 67:
+            case 80:
+            case 81:
+            case 82: document.getElementById('Regen').style.display = 'block'; break;
+            case 71:
+            case 73:
+            case 75:
+            case 77:
+            case 85:
+            case 86: document.getElementById('Schnee').style.display = 'block'; break;
+            case 95:
+            case 96:
+            case 99: document.getElementById('Blitz').style.display = 'block'; break;
+        }
     }
 }
 
-function displayWurstImage(temperature2m) {
-    const wurstImages = document.querySelectorAll('.wurst-image');
-    wurstImages.forEach(img => img.style.display = 'none');
+function displayWurstImage(temperature2m, summe) {
+    const wurstContainer = document.getElementById('wurstContainer');
+    wurstContainer.innerHTML = '';
+
+    let wurstImageId = '';
 
     if (temperature2m < 10) {
-        document.getElementById('Bratkalt').style.display = 'block';
+        wurstImageId = 'Bratkalt';
     } else if (temperature2m >= 10 && temperature2m < 20) {
-        document.getElementById('Bratwarm').style.display = 'block';
+        wurstImageId = 'Bratwarm';
     } else if (temperature2m >= 20) {
-        document.getElementById('Bratheiss').style.display = 'block';
-    }
-}
-
-function startWurstLoop(temperature2m) {
-    setInterval(() => {
-        moveWurstImages(1, temperature2m);  // Move one wurst at a time in the loop
-    }, 1000); // Every 1 second, a new wurst enters the screen
-}
-
-function moveWurstImages(summe, temperature2m) {
-    let wurstImage;
-
-    if (temperature2m < 10) {
-        wurstImage = document.getElementById('Bratkalt');
-    } else if (temperature2m >= 10 && temperature2m < 20) {
-        wurstImage = document.getElementById('Bratwarm');
-    } else if (temperature2m >= 20) {
-        wurstImage = document.getElementById('Bratheiss');
+        wurstImageId = 'Bratheiss';
     }
 
-    if (!wurstImage) {
-        return;
+    for (let i = 0; i < summe; i++) {
+        const imgElement = document.createElement('img');
+        imgElement.src = document.getElementById(wurstImageId).src;
+        imgElement.alt = `Bratwurst ${i + 1}`;
+        imgElement.classList.add('wurst-image');
+
+        wurstContainer.appendChild(imgElement);
     }
-
-    const clonedImage = wurstImage.cloneNode(true);
-    clonedImage.style.display = 'block';
-    clonedImage.classList.add('dynamic-wurst');
-
-    const randomY = Math.floor(Math.random() * window.innerHeight);
-    const direction = Math.random() > 0.5 ? 'moveRight' : 'moveLeft';
-    const startPosition = direction === 'moveRight' ? '-10vw' : '110vw';
-
-    clonedImage.style.top = `${randomY}px`;
-    clonedImage.style.left = startPosition;
-    clonedImage.style.animationName = direction;
-    clonedImage.style.animationDuration = `10s`;
-    clonedImage.style.animationDelay = `5s`;
-
-    document.body.appendChild(clonedImage);
-
-    setTimeout(() => {
-        clonedImage.remove();
-    }, 10000);
 }
 
 function updateFetchInterval() {
@@ -244,10 +229,8 @@ function updateFetchInterval() {
 }
 
 window.onload = () => {
-    // Fetch the latest data when the page loads
     fetchData();
 
-    // Set interval to fetch the latest data every 15 minutes
     setInterval(() => {
         fetchData();
     }, 15 * 60 * 1000);
