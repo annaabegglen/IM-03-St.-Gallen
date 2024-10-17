@@ -51,8 +51,8 @@ function displayBratwursts(summe, temperature) {
             element: document.createElement('img'),
             x: Math.random() * (window.innerWidth - 50), // Zufällige x-Position
             y: Math.random() * (window.innerHeight - 50), // Zufällige y-Position
-            dx: (Math.random() - 0.5) * 0.5, // Langsame zufällige x-Richtung
-            dy: (Math.random() - 0.5) * 0.5 // Langsame zufällige y-Richtung
+            dx: (Math.random() - 0.5) * 2, // Schneller zufällige x-Richtung
+            dy: (Math.random() - 0.5) * 2 // Schneller zufällige y-Richtung
         };
 
         bratwurst.element.src = bratwurstImage.src; // Setze die Bildquelle
@@ -94,7 +94,7 @@ function moveBratwursts() {
 
         // Wenn die Bratwurst zu nah am Cursor ist, bewege sie sanft weg
         if (distanceToCursor < 100) {
-            const avoidanceSpeed = 1; // Geschwindigkeit des Ausweichens
+            const avoidanceSpeed = 2; // Erhöhe die Geschwindigkeit des Ausweichens
             if (bratwurst.x < cursorX) {
                 bratwurst.x -= avoidanceSpeed; // Weiche nach links aus
             } else if (bratwurst.x > cursorX) {
@@ -183,30 +183,35 @@ function getTimeOfDay(timePart) {
 
 // Funktion, um den Text basierend auf den Wetterdaten anzuzeigen
 function displaySentence(temperature2m, summe, weatherCode, timeOfDay) {
-    let description = getWeatherDescription(weatherCode);
+    let description = getWeatherDescription(weatherCode, timeOfDay);
     let frequencyComment = getFrequencyComment(summe);
 
-    const sentence = `Es ist ein ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
+    const sentenceStart = timeOfDay === "Nacht" ? "Es ist eine" : "Es ist ein";
+    const sentence = `${sentenceStart} ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es sind ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
     document.getElementById('dataDisplay').innerHTML = sentence;
 }
 
 function displayPastSentence(temperature2m, summe, weatherCode, timeOfDay) {
-    let description = getWeatherDescription(weatherCode);
+    let description = getWeatherDescription(weatherCode, timeOfDay);
     let frequencyComment = getFrequencyComment(summe);
 
-    const sentence = `Es war ein ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es waren ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
+    const sentenceStart = timeOfDay === "Nacht" ? "Es war eine" : "Es war ein";
+    const sentence = `${sentenceStart} ${description} ${timeOfDay}, ${temperature2m} Grad<br> und es waren ${summe} Passant*innen an der Vadianstrasse unterwegs.<br>${frequencyComment}`;
     document.getElementById('dataDisplay').innerHTML = sentence;
 }
 
 // Funktion, um die Wetterbeschreibung zu generieren
-function getWeatherDescription(weatherCode) {
+function getWeatherDescription(weatherCode, timeOfDay) {
+    let description = "";
+    const isNight = timeOfDay === "Nacht";
+
     switch (weatherCode) {
-        case 0: return "sonniger";
+        case 0: description = isNight ? "klare" : "sonniger"; break;
         case 1:
         case 2:
-        case 3: return "bewölkter";
+        case 3: description = isNight ? "bewölkte" : "bewölkter"; break;
         case 45:
-        case 48: return "nebliger";
+        case 48: description = isNight ? "neblige" : "nebliger"; break;
         case 51:
         case 53:
         case 55:
@@ -219,18 +224,20 @@ function getWeatherDescription(weatherCode) {
         case 67:
         case 80:
         case 81:
-        case 82: return "regnerischer";
+        case 82: description = isNight ? "regnerische" : "regnerischer"; break;
         case 71:
         case 73:
         case 75:
         case 77:
         case 85:
-        case 86: return "schneereicher";
+        case 86: description = isNight ? "schneereiche" : "schneereicher"; break;
         case 95:
         case 96:
-        case 99: return "gewittriger";
-        default: return "unbekannter";
+        case 99: description = isNight ? "gewittrige" : "gewittriger"; break;
+        default: description = isNight ? "unbekannte" : "unbekannter"; break;
     }
+
+    return description;
 }
 
 function getFrequencyComment(summe) {
@@ -328,4 +335,3 @@ window.onload = () => {
         }
     });
 };
-
