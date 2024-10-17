@@ -46,7 +46,7 @@ h1 {
     bottom: 16vw;
     left: 5vw;
     font-family: 'KadwaBold';
-    font-size: 4.5vwpx;
+    font-size: 4.5vw;
     margin: 0;
     color: #000;
     z-index: 1; /* Sicherstellen, dass der Titel über den Bratwürsten ist */
@@ -68,7 +68,7 @@ h1 {
 #fetchControls {
     position: absolute;
     bottom: 7vw;
-    left: 2.8vw; /* Angepasst für bessere Positionierung */
+    left: 5vw; /* Gleicher Abstand wie beim Titel und Text */
     font-family: 'Kadwa';
     font-size: 1.5vw; /* Schriftgröße proportional zur Breite des Bildschirms */
     display: flex;
@@ -79,9 +79,9 @@ h1 {
 
 /* Rundes Design für Input-Felder und Button */
 #fetchControls input {
-    padding: 8vw; /* Platz in den Eingabefeldern proportional */
+    padding: 1.5vw; /* Platz in den Eingabefeldern proportional */
     font-size: 1.5vw; /* Schriftgröße für Eingabefelder proportional */
-    width: 70vw; /* Breite der Eingabefelder proportional zur Breite des Bildschirms */
+    width: 25vw; /* Breite der Eingabefelder proportional zur Breite des Bildschirms */
     max-width: 300px; /* Maximalbreite für Eingabefelder */
     font-family: 'Kadwa';
     border-radius: 20px;
@@ -90,15 +90,15 @@ h1 {
 
 #fetchButton {
     padding: 1.5vw 3vw; /* Platz im Button proportional */
-    font-size: 2vw; /* Schriftgröße für den Button proportional */
+    font-size: 1.5vw; /* Gleiche Schriftgröße wie die Eingabefelder */
     background-color: white;
     color: black;
     border: 1px solid #000;
     cursor: pointer;
     border-radius: 20px;
     font-family: 'Kadwa';
-    width: 70vw; /* Breite des Buttons proportional zur Breite des Bildschirms */
-    max-width: 300px; /*Maximalbreite für den Button */
+    width: 25vw; /* Breite des Buttons proportional zur Breite des Bildschirms */
+    max-width: 300px; /* Maximalbreite für den Button */
 }
 
 #fetchButton:hover {
@@ -120,16 +120,7 @@ h1 {
     z-index: 1; /* Sicherstellen, dass der Senftube über den Bratwürsten ist */
 }
 
-
 /* RESPONSIVE DESIGN */
-
-/* Grundlegende Stile */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif; /* Grundschriftart */
-    overflow: hidden; /* Verhindert das Scrollen */
-}
 
 /* Für kleine Bildschirme (typischerweise Mobiltelefone) */
 @media only screen and (max-width: 639px) {
@@ -141,36 +132,37 @@ body {
 
     h1 {
         font-size: 10vw; /* Überschrift proportional zur Breite des Bildschirms */
-        text-align: left; /* Links ausrichten */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-bottom: 0.5em; /* Abstand unter der Überschrift */
     }
 
     #dataDisplay {
         font-size: 3vw; /* Schriftgröße für den Datenanzeigebereich proportional */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-top: 1vw; /* Abstand oben */
         text-align: left; /* Links ausrichten */
     }
 
     #fetchControls {
+        margin-left: 5vw; /* Gleicher linker Abstand wie andere Elemente */
         display: flex;
         flex-direction: row; /* Zeilenanordnung */
         justify-content: flex-start; /* Links ausrichten */
         margin-top: 2vw; /* Abstand oben */
-   
     }
 
     #fetchControls input {
         margin-right: 1vw; /* Abstand zwischen den Eingabefeldern */
         padding: 1vw; /* Platz in den Eingabefeldern proportional */
         max-width: 180px; /* Maximalbreite für Eingabefelder */
-        width: 25vw; /* Breite der Eingabefelder proportional zur Breite des Bildschirms */     
+        width: 25vw; /* Breite der Eingabefelder proportional zur Breite des Bildschirms */
         font-size: 2.5vw; /* Schriftgröße proportional zur Breite des Bildschirms */
-        height: 4vw; /* Höhe der Eingabefelder */
+        height: 3vw; /* Höhe der Eingabefelder */
     }
 
     #fetchButton {
         padding: 1vw 2vw; /* Platz im Button proportional */
-        font-size: 1.5vw; /* Schriftgröße für den Button proportional */
+        font-size: 2.5vw; /* Schriftgröße für den Button proportional */
         width: 25vw; /* Breite des Buttons proportional zur Breite des Bildschirms */
         max-width: 180px; /* Maximalbreite für den Button */
     }
@@ -194,17 +186,19 @@ body {
 
     h1 {
         font-size: 10vw; /* Überschrift proportional zur Breite des Bildschirms */
-        text-align: left; /* Links ausrichten für Tablets */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-bottom: 0.5em; /* Abstand unter der Überschrift */
     }
 
     #dataDisplay {
         font-size: 3vw; /* Schriftgröße für den Datenanzeigebereich proportional */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-top: 1vw; /* Abstand oben */
-        text-align: left; /* Links ausrichten für Tablets */
+        text-align: left; /* Links ausrichten */
     }
 
     #fetchControls {
+        margin-left: 5vw; /* Gleicher linker Abstand wie andere Elemente */
         display: flex;
         flex-direction: row; /* Zeilenanordnung */
         justify-content: flex-start; /* Links ausrichten */
@@ -244,17 +238,19 @@ body {
 
     h1 {
         font-size: 6vw; /* Überschrift proportional zur Breite des Bildschirms */
-        text-align: left; /* Links ausrichten für Tablets */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-bottom: 0.5em; /* Abstand unter der Überschrift */
     }
 
     #dataDisplay {
         font-size: 2.5vw; /* Schriftgröße für den Datenanzeigebereich proportional */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-top: 2vw; /* Abstand oben */
-        text-align: left; /* Links ausrichten für Tablets */
+        text-align: left; /* Links ausrichten */
     }
 
     #fetchControls {
+        margin-left: 5vw; /* Gleicher linker Abstand wie andere Elemente */
         display: flex;
         flex-direction: row; /* Zeilenanordnung */
         justify-content: flex-start; /* Links ausrichten */
@@ -269,7 +265,7 @@ body {
     }
 
     #fetchButton {
-        padding: 1vw 2vw; /* Platz im Button proportional */
+        padding: 1vw; /* Platz im Button proportional */
         font-size: 1.5vw; /* Schriftgröße für den Button proportional */
         width: 25vw; /* Breite des Buttons proportional zur Breite des Bildschirms */
         max-width: 180px; /* Maximalbreite für den Button */
@@ -285,7 +281,6 @@ body {
     }
 }
 
-
 /* Für Desktops */
 @media only screen and (min-width: 1024px) and (max-width: 1919px) {
     body {
@@ -295,34 +290,37 @@ body {
 
     h1 {
         font-size: 5vw; /* Überschrift proportional zur Breite des Bildschirms */
-        text-align: left; /* Links ausrichten für Desktops */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-bottom: 0.3em; /* Abstand unter der Überschrift */
     }
 
     #dataDisplay {
         font-size: 2vw; /* Schriftgröße für den Datenanzeigebereich proportional */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-top: 2vw; /* Abstand oben */
-        text-align: left; /* Links ausrichten für Desktops */
+        text-align: left; /* Links ausrichten */
     }
 
     #fetchControls {
+        margin-left: 5vw; /* Gleicher linker Abstand wie andere Elemente */
         display: flex;
         flex-direction: row; /* Zeilenanordnung */
         justify-content: flex-start; /* Links ausrichten */
         margin-top: 2vw; /* Abstand oben */
-        max-height: 15px;
     }
 
     #fetchControls input {
         margin-right: 1vw; /* Abstand zwischen den Eingabefeldern */
         padding: 1vw; /* Platz in den Eingabefeldern proportional */
-        max-width: 160px; /* Maximalbreite für Eingabefelder */
+        max-width: 150px; /* Maximalbreite für Eingabefelder */
         max-height: 15px;
+        font-size: 1.2vw; /* Schriftgröße für Eingabefelder proportional */
     }
 
     #fetchButton {
-        padding: 1vw 2vw; /* Platz im Button proportional */
-        font-size: 1.1vw; /* Schriftgröße für den Button proportional */
+        padding: 0.4vw; /* Platz im Button proportional */
+        font-size: 1.2vw; /* Schriftgröße für den Button proportional */
+        max-width: 160px; /* Maximalbreite für den Button */
     }
 
     /* Stil für Wetterbilder */
@@ -335,7 +333,6 @@ body {
     }
 }
 
-
 /* Für große Bildschirme */
 @media only screen and (min-width: 1920px) {
     body {
@@ -345,17 +342,19 @@ body {
 
     h1 {
         font-size: 4.5vw; /* Überschrift proportional zur Breite des Bildschirms */
-        text-align: left; /* Links ausrichten für große Bildschirme */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-bottom: 0.5em; /* Abstand unter der Überschrift */
     }
 
     #dataDisplay {
         font-size: 1.8vw; /* Schriftgröße für den Datenanzeigebereich proportional */
+        margin-left: 5vw; /* Gleicher Abstand wie andere Elemente */
         margin-top: 2.5vw; /* Abstand oben */
-        text-align: left; /* Links ausrichten für große Bildschirme */
+        text-align: left; /* Links ausrichten */
     }
 
     #fetchControls {
+        margin-left: 5vw; /* Gleicher linker Abstand wie andere Elemente */
         display: flex;
         flex-direction: row; /* Zeilenanordnung */
         justify-content: flex-start; /* Links ausrichten */
@@ -370,7 +369,9 @@ body {
 
     #fetchButton {
         padding: 1.2vw 2.5vw; /* Platz im Button proportional */
-        font-size: 1.5vw; /* Schriftgröße für den Button proportional */
+        font-size: 1.4vw; /* Schriftgröße für den Button proportional */
+        width: 200px; /* Breite des Buttons */
+        max-width: 200px; /* Maximalbreite für den Button */
     }
 
     /* Stil für Wetterbilder */

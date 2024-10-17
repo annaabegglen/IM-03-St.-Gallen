@@ -1,3 +1,65 @@
+document.addEventListener('DOMContentLoaded', function() {
+    loadBratwurstImages();
+    setInitialDateTime();
+    fetchData();
+    setInterval(() => fetchData(), 15 * 60 * 1000); // Aktualisiere die Daten alle 15 Minuten
+
+    document.getElementById('fetchButton').addEventListener('click', () => {
+        fetchData();
+    });
+
+    function setInitialDateTime() {
+        var now = new Date();
+        var date = now.toISOString().slice(0, 10);
+        var time = now.toTimeString().slice(0, 5);
+
+        document.getElementById('dateInput').value = date;
+        document.getElementById('timeInput').value = time;
+    }
+});
+
+function loadBratwurstImages() {
+    const bratwurstImages = {
+        kalt: new Image(),
+        warm: new Image(),
+        heiss: new Image()
+    };
+    bratwurstImages.kalt.src = 'images/Bratwurst kalt.png';
+    bratwurstImages.warm.src = 'images/Bratwurst warm.png';
+    bratwurstImages.heiss.src = 'images/Bratwurst heiss.png';
+}
+
+function fetchData() {
+    let date = document.getElementById('dateInput').value;
+    let time = document.getElementById('timeInput').value;
+    let apiUrl = `https://im3.annaabegglen.ch/etl/unload.php?date=${date}&time=${time}`;
+
+    fetch(apiUrl).then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    }).then(data => {
+        if (!data || data.length === 0) {
+            document.getElementById('dataDisplay').innerText = 'Keine Daten verfügbar.';
+            return;
+        }
+        displayWeatherData(data[0]);
+    }).catch(error => {
+        console.error("Error fetching data:", error);
+        document.getElementById('dataDisplay').innerText = 'Fehler beim Laden der Daten.';
+    });
+}
+
+function displayWeatherData(data) {
+    const { temperature_2m, summe, weather_code } = data;
+    const sentence = `Es ist ein ${getWeatherDescription(weather_code)}, ${temperature_2m} Grad<br> und es sind ${summe} Passant*innen unterwegs.`;
+    document.getElementById('dataDisplay').innerHTML = sentence;
+}
+
+function getWeatherDescription(weatherCode) {
+    // Hier könnte eine komplette Implementierung zur Generierung einer Wetterbeschreibung hinzugefügt werden
+    return 'schöner Tag'; // Beispielhafte Implementierung
+}
+
 // Mausbewegung für die Senftube
 document.addEventListener('mousemove', function(event) {
     const senftube = document.getElementById('senftube');
