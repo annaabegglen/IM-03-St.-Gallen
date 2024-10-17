@@ -70,7 +70,7 @@ h1 {
     bottom: 7vw;
     left: 2.8vw; /* Angepasst für bessere Positionierung */
     font-family: 'Kadwa';
-    font-size: 2vw; /* Schriftgröße proportional zur Breite des Bildschirms */
+    font-size: 1.5vw; /* Schriftgröße proportional zur Breite des Bildschirms */
     display: flex;
     align-items: center;
     gap: 2vw; /* Abstand zwischen den Elementen */
@@ -80,7 +80,7 @@ h1 {
 /* Rundes Design für Input-Felder und Button */
 #fetchControls input {
     padding: 8vw; /* Platz in den Eingabefeldern proportional */
-    font-size: 2vw; /* Schriftgröße für Eingabefelder proportional */
+    font-size: 1.5vw; /* Schriftgröße für Eingabefelder proportional */
     width: 70vw; /* Breite der Eingabefelder proportional zur Breite des Bildschirms */
     max-width: 300px; /* Maximalbreite für Eingabefelder */
     font-family: 'Kadwa';
@@ -98,10 +98,8 @@ h1 {
     border-radius: 20px;
     font-family: 'Kadwa';
     width: 70vw; /* Breite des Buttons proportional zur Breite des Bildschirms */
-    max-width: 300px; /* Maximalbreite für den Button */
+    max-width: 300px; /*Maximalbreite für den Button */
 }
-
-
 
 #fetchButton:hover {
     background-color: #c6c4c4;
@@ -116,7 +114,7 @@ h1 {
 /* Senftube */
 #senftube {
     position: absolute;
-    width: 2.5vw !important;
+    width: 2.5vw;
     pointer-events: none;
     transform: translate(-50%, -50%);
     z-index: 1; /* Sicherstellen, dass der Senftube über den Bratwürsten ist */
@@ -130,63 +128,68 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif; /* Grundschriftart */
+    overflow: hidden; /* Verhindert das Scrollen */
 }
 
-/* Für mobile Geräte */
-body {
-    font-size: 2.5vw; /* Schriftgröße proportional zur Breite des Bildschirms */
-    padding: 2vw; /* Abstand proportional zur Breite des Bildschirms */
+/* Für kleine Bildschirme (typischerweise Mobiltelefone) */
+@media only screen and (max-width: 639px) {
+    body {
+        font-size: 2.5vw; /* Schriftgröße proportional zur Breite des Bildschirms */
+        padding: 2vw; /* Abstand proportional zur Breite des Bildschirms */
+        overflow: hidden; /* Verhindert das Scrollen */
+    }
+
+    h1 {
+        font-size: 10vw; /* Überschrift proportional zur Breite des Bildschirms */
+        text-align: left; /* Links ausrichten */
+        margin-bottom: 0.5em; /* Abstand unter der Überschrift */
+    }
+
+    #dataDisplay {
+        font-size: 3vw; /* Schriftgröße für den Datenanzeigebereich proportional */
+        margin-top: 1vw; /* Abstand oben */
+        text-align: left; /* Links ausrichten */
+    }
+
+    #fetchControls {
+        display: flex;
+        flex-direction: row; /* Zeilenanordnung */
+        justify-content: flex-start; /* Links ausrichten */
+        margin-top: 2vw; /* Abstand oben */
+   
+    }
+
+    #fetchControls input {
+        margin-right: 1vw; /* Abstand zwischen den Eingabefeldern */
+        padding: 1vw; /* Platz in den Eingabefeldern proportional */
+        max-width: 180px; /* Maximalbreite für Eingabefelder */
+        width: 25vw; /* Breite der Eingabefelder proportional zur Breite des Bildschirms */     
+        font-size: 2.5vw; /* Schriftgröße proportional zur Breite des Bildschirms */
+        height: 4vw; /* Höhe der Eingabefelder */
+    }
+
+    #fetchButton {
+        padding: 1vw 2vw; /* Platz im Button proportional */
+        font-size: 1.5vw; /* Schriftgröße für den Button proportional */
+        width: 25vw; /* Breite des Buttons proportional zur Breite des Bildschirms */
+        max-width: 180px; /* Maximalbreite für den Button */
+    }
+
+    .weather-image {
+        max-width: 12vw; /* Maximalbreite für Wetterbilder proportional */
+    }
+
+    #senftube {
+        width: 6vw; /* Größe der Senftube proportional */
+    }
 }
-
-
-h1 {
-    font-size: 10vw; /* Überschrift proportional zur Breite des Bildschirms */
-    text-align: left; /* Links ausrichten für Tablets */
-    margin-bottom: 0.5em; /* Abstand unter der Überschrift */
-}
-
-#dataDisplay {
-    font-size: 3vw; /* Schriftgröße für den Datenanzeigebereich proportional */
-    margin-top: 1vw; /* Abstand oben */
-    text-align: left; /* Links ausrichten für Tablets */
-}
-
-#fetchControls {
-    display: flex;
-    flex-direction: row; /* Zeilenanordnung */
-    justify-content: flex-start; /* Links ausrichten */
-    margin-top: 2vw; /* Abstand oben */
-}
-
-#fetchControls input {
-    margin-right: 1vw; /* Abstand zwischen den Eingabefeldern */
-    padding: 1vw; /* Platz in den Eingabefeldern proportional */
-    max-width: 180px; /* Maximalbreite für Eingabefelder */
-    width: 25vw; /* Breite der Eingabefelder proportional zur Breite des Bildschirms */
-}
-
-#fetchButton {
-    padding: 1vw 2vw; /* Platz im Button proportional */
-    font-size: 1.5vw; /* Schriftgröße für den Button proportional */
-    width: 25vw; /* Breite des Buttons proportional zur Breite des Bildschirms */
-    max-width: 180px; /* Maximalbreite für den Button */
-}
-
-/* Stil für Wetterbilder */
-.weather-image {
-    max-width: 12vw; /* Maximalbreite für Wetterbilder proportional */
-}
-
-#senftube {
-    width: 3vw; /* Größe der Senftube proportional */
-}
-
 
 /* Für grosse Handys */
 @media only screen and (min-width: 640px) and (max-width: 767px) {
     body {
         font-size: 2.5vw; /* Schriftgröße proportional zur Breite des Bildschirms */
         padding: 2vw; /* Abstand proportional zur Breite des Bildschirms */
+        overflow: hidden; /* Verhindert das Scrollen */
     }
 
     h1 {
@@ -228,7 +231,7 @@ h1 {
     }
 
     #senftube {
-        width: 3vw; /* Größe der Senftube proportional */
+        width: 6vw; /* Größe der Senftube proportional */
     }
 }
 
@@ -307,17 +310,19 @@ h1 {
         flex-direction: row; /* Zeilenanordnung */
         justify-content: flex-start; /* Links ausrichten */
         margin-top: 2vw; /* Abstand oben */
+        max-height: 15px;
     }
 
     #fetchControls input {
         margin-right: 1vw; /* Abstand zwischen den Eingabefeldern */
         padding: 1vw; /* Platz in den Eingabefeldern proportional */
-        max-width: 150px; /* Maximalbreite für Eingabefelder */
+        max-width: 160px; /* Maximalbreite für Eingabefelder */
+        max-height: 15px;
     }
 
     #fetchButton {
         padding: 1vw 2vw; /* Platz im Button proportional */
-        font-size: 1.2vw; /* Schriftgröße für den Button proportional */
+        font-size: 1.1vw; /* Schriftgröße für den Button proportional */
     }
 
     /* Stil für Wetterbilder */
