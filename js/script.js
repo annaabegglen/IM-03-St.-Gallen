@@ -60,19 +60,14 @@ function getWeatherDescription(weatherCode) {
     return 'schöner Tag'; // Beispielhafte Implementierung
 }
 
-// Mausbewegung für die Senftube
-document.addEventListener('mousemove', function(event) {
-    const senftube = document.getElementById('senftube');
-    senftube.style.left = event.pageX + 'px';
-    senftube.style.top = event.pageY + 'px';
-});
-
-// Bratwurstbilder
-const bratwurstImages = {
+let bratwurstImages = {
     kalt: null,
     warm: null,
     heiss: null
 };
+
+let bratwursts = [];
+let isBratwurstMoving = false;  // Kontrollvariable, um die Bewegung nur einmal zu starten
 
 // Bratwurstbilder laden
 function loadBratwurstImages() {
@@ -84,9 +79,6 @@ function loadBratwurstImages() {
     bratwurstImages.warm.src = 'images/Bratwurst warm.png';
     bratwurstImages.heiss.src = 'images/Bratwurst heiss.png';
 }
-
-// Array für die Bratwürste
-let bratwursts = [];
 
 // Funktion, um die Bratwürste anzuzeigen und ihre Bewegung zu initialisieren
 function displayBratwursts(summe, temperature) {
@@ -113,8 +105,8 @@ function displayBratwursts(summe, temperature) {
             element: document.createElement('img'),
             x: Math.random() * (window.innerWidth - 50), // Zufällige x-Position
             y: Math.random() * (window.innerHeight - 50), // Zufällige y-Position
-            dx: (Math.random() - 0.5) * 2, // Schneller zufällige x-Richtung
-            dy: (Math.random() - 0.5) * 2 // Schneller zufällige y-Richtung
+            dx: (Math.random() - 0.5) * 2, // Zufällige x-Richtung
+            dy: (Math.random() - 0.5) * 2 // Zufällige y-Richtung
         };
 
         bratwurst.element.src = bratwurstImage.src; // Setze die Bildquelle
@@ -126,8 +118,11 @@ function displayBratwursts(summe, temperature) {
         bratwursts.push(bratwurst); // Füge die Bratwurst zum Array hinzu
     }
 
-    // Bewegung der Bratwürste starten
-    moveBratwursts();
+    // Nur die Bewegung starten, wenn sie noch nicht aktiv ist
+    if (!isBratwurstMoving) {
+        isBratwurstMoving = true;
+        moveBratwursts();  // Bewegung der Bratwürste starten
+    }
 }
 
 // Funktion, um die Bratwürste zu bewegen
@@ -150,13 +145,13 @@ function moveBratwursts() {
         bratwurst.element.style.top = bratwurst.y + 'px';
 
         // Abstand zum Cursor prüfen
-        const cursorX = parseFloat(senftube.style.left);
-        const cursorY = parseFloat(senftube.style.top);
+        const cursorX = parseFloat(document.getElementById('senftube').style.left);
+        const cursorY = parseFloat(document.getElementById('senftube').style.top);
         const distanceToCursor = Math.sqrt(Math.pow(bratwurst.x - cursorX, 2) + Math.pow(bratwurst.y - cursorY, 2));
 
         // Wenn die Bratwurst zu nah am Cursor ist, bewege sie sanft weg
         if (distanceToCursor < 100) {
-            const avoidanceSpeed = 2; // Erhöhe die Geschwindigkeit des Ausweichens
+            const avoidanceSpeed = 2; // Geschwindigkeit des Ausweichens
             if (bratwurst.x < cursorX) {
                 bratwurst.x -= avoidanceSpeed; // Weiche nach links aus
             } else if (bratwurst.x > cursorX) {
@@ -170,8 +165,18 @@ function moveBratwursts() {
         }
     });
 
-    requestAnimationFrame(moveBratwursts); // Bewege die Bratwürste kontinuierlich
+    // Die Bewegung kontinuierlich aufrechterhalten
+    requestAnimationFrame(moveBratwursts);
 }
+
+// Mausbewegung für die Senftube
+document.addEventListener('mousemove', function(event) {
+    const senftube = document.getElementById('senftube');
+    senftube.style.left = event.pageX + 'px';
+    senftube.style.top = event.pageY + 'px';
+});
+
+
 
 // Wetterdaten und Fußgängerabfrage
 async function fetchData(date, time) {
